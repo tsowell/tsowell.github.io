@@ -1,0 +1,191 @@
+diff --git a/kernel/arch/dreamcast/include/arch/arch.h b/kernel/arch/dreamcast/include/arch/arch.h
+index 2e53d22..cd34276 100644
+--- a/kernel/arch/dreamcast/include/arch/arch.h
++++ b/kernel/arch/dreamcast/include/arch/arch.h
+@@ -361,7 +361,7 @@ const char *kos_get_authors(void);
+     \return                 Whether the address is valid or not for normal
+                             memory access.
+ */
+-#define arch_valid_address(ptr) ((ptr_t)(ptr) >= 0x8c010000 && (ptr_t)(ptr) < 0x8d000000)
++#define arch_valid_address(ptr) ((ptr_t)(ptr) >= 0x8c010000 && (ptr_t)(ptr) < 0x8e000000)
+ #else
+ #define arch_valid_address(ptr) ((ptr_t)(ptr) >= 0x8c010000 && (ptr_t)(ptr) < 0x8e000000)
+ #endif
+diff --git a/kernel/arch/dreamcast/kernel/mm.c b/kernel/arch/dreamcast/kernel/mm.c
+index c07ad90..dd49885 100644
+--- a/kernel/arch/dreamcast/kernel/mm.c
++++ b/kernel/arch/dreamcast/kernel/mm.c
+@@ -46,7 +46,7 @@ void* mm_sbrk(unsigned long increment) {
+ 
+     sbrk_base = (void *)(increment + (unsigned long)sbrk_base);
+ 
+-    if(((uint32)sbrk_base) >= (0x8d000000 - 65536)) {
++    if(((uint32)sbrk_base) >= (0x8e000000 - 65536)) {
+         dbglog(DBG_DEAD, "Requested sbrk_base %p, was %p, diff %lu\n",
+                sbrk_base, base, increment);
+         arch_panic("out of memory; about to run over kernel stack");
+diff --git a/kernel/arch/dreamcast/kernel/stack.c b/kernel/arch/dreamcast/kernel/stack.c
+index db43481..664a8b5 100644
+--- a/kernel/arch/dreamcast/kernel/stack.c
++++ b/kernel/arch/dreamcast/kernel/stack.c
+@@ -29,7 +29,7 @@ void arch_stk_trace_at(uint32 fp, int n) {
+     dbgio_printf("-------- Stack Trace (innermost first) ---------\n");
+ 
+     while(fp != 0xffffffff) {
+-        if((fp & 3) || (fp < 0x8c000000) || (fp > 0x8d000000)) {
++        if((fp & 3) || (fp < 0x8c000000) || (fp > 0x8e000000)) {
+             dbgio_printf("   (invalid frame pointer)\n");
+             break;
+         }
+diff --git a/kernel/arch/dreamcast/kernel/startup.s b/kernel/arch/dreamcast/kernel/startup.s
+index 4859ebe..35b1817 100644
+--- a/kernel/arch/dreamcast/kernel/startup.s
++++ b/kernel/arch/dreamcast/kernel/startup.s
+@@ -174,7 +174,7 @@ __arch_old_stack:
+ old_stack:
+ 	.long	0
+ new_stack:
+-	.long	0x8d000000
++	.long	0x8e000000
+ p2_mask:
+ 	.long	0xa0000000
+ setup_cache_addr:
+diff --git a/kernel/mm/malloc_debug.c b/kernel/mm/malloc_debug.c
+index e2a939e..d4da6f6 100644
+--- a/kernel/mm/malloc_debug.c
++++ b/kernel/mm/malloc_debug.c
+@@ -108,7 +108,7 @@ void *malloc(size_t amt) {
+     spinlock_unlock(&mutex);
+ 
+     printf("Thread %d/%08lx allocated %d bytes at %08lx; %08lx left\n",
+-           ctl->thread, ctl->addr, ctl->size, space, 0x8d000000 - (uint32)sbrk(0));
++           ctl->thread, ctl->addr, ctl->size, space, 0x8e000000 - (uint32)sbrk(0));
+ 
+     assert(!(((uint32)space) & 7));
+ 
+@@ -178,7 +178,7 @@ void free(void *block) {
+     printf("Thread %d/%08x freeing block @ %08x\n",
+            thd_current->tid, pr, (uint32)block);
+ 
+-    if(((uint32)block) & 7 || (uint32)block < 0x8c010000 || (uint32)block >= 0x8d000000) {
++    if(((uint32)block) & 7 || (uint32)block < 0x8c010000 || (uint32)block >= 0x8e000000) {
+         printf("   ATTEMPT TO FREE INVALID ADDRESS!\n");
+         spinlock_unlock(&mutex);
+         return;
+diff --git a/utils/dc-chain/patches/gcc-4.4.0-kos.diff b/utils/dc-chain/patches/gcc-4.4.0-kos.diff
+index 873f079..3c8ecfd 100644
+--- a/utils/dc-chain/patches/gcc-4.4.0-kos.diff
++++ b/utils/dc-chain/patches/gcc-4.4.0-kos.diff
+@@ -1528,7 +1528,7 @@ diff -ruN gcc-4.4.0/gcc/config/sh/crt1.asm gcc-4.4.0-kos/gcc/config/sh/crt1.asm
+ +old_stack:
+ +	.long	0
+ +new_stack:
+-+	.long	0x8d000000
+++	.long	0x8e000000
+ +p2_mask:
+ +	.long	0xa0000000
+ +setup_cache_addr:
+diff --git a/utils/dc-chain/patches/gcc-4.4.4-kos.diff b/utils/dc-chain/patches/gcc-4.4.4-kos.diff
+index 84e6220..a548ccb 100644
+--- a/utils/dc-chain/patches/gcc-4.4.4-kos.diff
++++ b/utils/dc-chain/patches/gcc-4.4.4-kos.diff
+@@ -1528,7 +1528,7 @@ diff -ruN gcc-4.4.4/gcc/config/sh/crt1.asm gcc-4.4.4-kos/gcc/config/sh/crt1.asm
+ +old_stack:
+ +	.long	0
+ +new_stack:
+-+	.long	0x8d000000
+++	.long	0x8e000000
+ +p2_mask:
+ +	.long	0xa0000000
+ +setup_cache_addr:
+diff --git a/utils/dc-chain/patches/gcc-4.5.2-kos.diff b/utils/dc-chain/patches/gcc-4.5.2-kos.diff
+index 5266191..0fa1a43 100644
+--- a/utils/dc-chain/patches/gcc-4.5.2-kos.diff
++++ b/utils/dc-chain/patches/gcc-4.5.2-kos.diff
+@@ -1528,7 +1528,7 @@ diff -ruN gcc-4.5.2/gcc/config/sh/crt1.asm gcc-4.5.2-kos/gcc/config/sh/crt1.asm
+ +old_stack:
+ +	.long	0
+ +new_stack:
+-+	.long	0x8d000000
+++	.long	0x8e000000
+ +p2_mask:
+ +	.long	0xa0000000
+ +setup_cache_addr:
+diff --git a/utils/dc-chain/patches/gcc-4.7.0-kos.diff b/utils/dc-chain/patches/gcc-4.7.0-kos.diff
+index ee592f3..8e71aef 100644
+--- a/utils/dc-chain/patches/gcc-4.7.0-kos.diff
++++ b/utils/dc-chain/patches/gcc-4.7.0-kos.diff
+@@ -1230,7 +1230,7 @@ diff -ruN gcc-4.7.0/libgcc/config/sh/crt1.S gcc-4.7.0-kos/libgcc/config/sh/crt1.
+ +old_stack:
+ +	.long	0
+ +new_stack:
+-+	.long	0x8d000000
+++	.long	0x8e000000
+ +p2_mask:
+ +	.long	0xa0000000
+ +setup_cache_addr:
+diff --git a/utils/dc-chain/patches/gcc-4.7.4-kos.diff b/utils/dc-chain/patches/gcc-4.7.4-kos.diff
+index 7d5936f..1decccc 100644
+--- a/utils/dc-chain/patches/gcc-4.7.4-kos.diff
++++ b/utils/dc-chain/patches/gcc-4.7.4-kos.diff
+@@ -1255,7 +1255,7 @@ diff -ruN gcc-4.7.4/libgcc/config/sh/crt1.S gcc-4.7.4-new/libgcc/config/sh/crt1.
+ +old_stack:
+ +	.long	0
+ +new_stack:
+-+	.long	0x8d000000
+++	.long	0x8e000000
+ +p2_mask:
+ +	.long	0xa0000000
+ +setup_cache_addr:
+diff --git a/utils/dc-chain/patches/gcc-4.8.1-kos.diff b/utils/dc-chain/patches/gcc-4.8.1-kos.diff
+index 8f581db..090fbbd 100644
+--- a/utils/dc-chain/patches/gcc-4.8.1-kos.diff
++++ b/utils/dc-chain/patches/gcc-4.8.1-kos.diff
+@@ -1219,7 +1219,7 @@ diff -ruN gcc-4.8.1/libgcc/config/sh/crt1.S gcc-4.8.1-kos/libgcc/config/sh/crt1.
+ +old_stack:
+ +	.long	0
+ +new_stack:
+-+	.long	0x8d000000
+++	.long	0x8e000000
+ +p2_mask:
+ +	.long	0xa0000000
+ +setup_cache_addr:
+diff --git a/utils/dc-chain/patches/gcc-4.8.2-kos.diff b/utils/dc-chain/patches/gcc-4.8.2-kos.diff
+index 8f581db..090fbbd 100644
+--- a/utils/dc-chain/patches/gcc-4.8.2-kos.diff
++++ b/utils/dc-chain/patches/gcc-4.8.2-kos.diff
+@@ -1219,7 +1219,7 @@ diff -ruN gcc-4.8.1/libgcc/config/sh/crt1.S gcc-4.8.1-kos/libgcc/config/sh/crt1.
+ +old_stack:
+ +	.long	0
+ +new_stack:
+-+	.long	0x8d000000
+++	.long	0x8e000000
+ +p2_mask:
+ +	.long	0xa0000000
+ +setup_cache_addr:
+diff --git a/utils/dc-chain/patches/gcc-9.2.0-kos.diff b/utils/dc-chain/patches/gcc-9.2.0-kos.diff
+index e7fdad2..17d1c4b 100644
+--- a/utils/dc-chain/patches/gcc-9.2.0-kos.diff
++++ b/utils/dc-chain/patches/gcc-9.2.0-kos.diff
+@@ -897,7 +897,7 @@ diff -ruN gcc-9.2.0/libgcc/config/sh/crt1.S gcc-9.2.0-kos/libgcc/config/sh/crt1.
+ +old_stack:
+ +	.long	0
+ +new_stack:
+-+	.long	0x8d000000
+++	.long	0x8e000000
+ +p2_mask:
+ +	.long	0xa0000000
+ +setup_cache_addr:
+diff --git a/utils/dc-chain/patches/gcc-9.3.0-kos.diff b/utils/dc-chain/patches/gcc-9.3.0-kos.diff
+index c42a553..3b7c132 100644
+--- a/utils/dc-chain/patches/gcc-9.3.0-kos.diff
++++ b/utils/dc-chain/patches/gcc-9.3.0-kos.diff
+@@ -897,7 +897,7 @@ diff -ruN gcc-9.3.0/libgcc/config/sh/crt1.S gcc-9.3.0-kos/libgcc/config/sh/crt1.
+ +old_stack:
+ +	.long	0
+ +new_stack:
+-+	.long	0x8d000000
+++	.long	0x8e000000
+ +p2_mask:
+ +	.long	0xa0000000
+ +setup_cache_addr:
