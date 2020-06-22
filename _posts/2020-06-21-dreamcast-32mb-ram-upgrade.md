@@ -227,6 +227,9 @@ program from a disc, etc.
 
 #### 6. Flash an AMX 3 Dreamcast BIOS
 
+_EDIT: darc has created a [Dreamshell image with 32MB-patched versions of many
+BIOS images](https://dreamcast.wiki/32MB_RAM_expansion)_
+
 I modified [v1.032 of japanese-cakes' excellent Custom
 BootROM](https://blog.japanese-cake.io/index.php/2016/06/20/release-custom-bootrom-v1-032/)
 (SHA1 ec42875983f33cefafe8616eb9152cf0172136ae) to use AMX 3.
@@ -305,3 +308,9 @@ that determine where the stack is placed.  You will need to recompile your KOS
 toolchain after applying the above patch so that the stack gets placed at the
 new ceiling.  If the stack still starts at 0x8d000000 you will probably have a
 bad time trying to extend the heap into the upper 16MB of SDRAM.
+
+## Discussion
+
+There is a [thread on
+Dreamcast-talk](https://www.dreamcast-talk.com/forum/viewtopic.php?f=2&t=13039)
+about the mod.
