@@ -309,6 +309,10 @@ toolchain after applying the above patch so that the stack gets placed at the
 new ceiling.  If the stack still starts at 0x8d000000 you will probably have a
 bad time trying to extend the heap into the upper 16MB of SDRAM.
 
+_EDIT: [See
+here](https://github.com/tsowell/KallistiOS-scummvm/commit/09aea2bb3becc22dc4f178cf4200164659177c76)
+for an example of adding runtime 32MB support to KallistiOS._
+
 ## Discussion
 
 There is a [thread on
