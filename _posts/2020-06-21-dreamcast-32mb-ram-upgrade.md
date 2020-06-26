@@ -297,6 +297,12 @@ should be possible for software to check the MCR at runtime to determine how
 much RAM is present, but I'm not aware of anything that does that at the
 moment.  I've only tested with KallistiOS using the changes described below.
 
+### Existing library
+
+_EDIT: It appears that some retail Dreamcast games (based on a not-so-random
+sampling, about 25% of them) are not compatible with this mod.  I'm not yet
+sure why they don't work or what can be done to make them work._
+
 ### KallistiOS
 
 You should just need to replace 0x8d000000 (the 16MB ceiling) with 0x8e000000
@@ -313,8 +319,18 @@ _EDIT: [See
 here](https://github.com/tsowell/KallistiOS-scummvm/commit/09aea2bb3becc22dc4f178cf4200164659177c76)
 for an example of adding runtime 32MB support to KallistiOS._
 
+### ScummVM
+
+_EDIT: In [the latest
+release](https://github.com/tsowell/scummvm-dreamcast/releases) my [alternate
+ScummVM backend for
+Dreamcast](https://github.com/tsowell/scummvm-dreamcast/blob/dcalt-backend/backends/platform/dcalt/README.md)
+now supports both 16MB and 32MB Dreamcasts from the same binaries.  ScummVM
+supports several games that run well on Dreamcast but require more than 16MB
+RAM._
+
 ## Discussion
 
-There is a [thread on
-Dreamcast-talk](https://www.dreamcast-talk.com/forum/viewtopic.php?f=2&t=13039)
-about the mod.
+* [Dreamcast-talk](https://www.dreamcast-talk.com/forum/viewtopic.php?f=2&t=13039)
+* [Obscure Gamers](https://www.obscuregamers.com/threads/dreamcast-double-memory-mod-is-now-possible-32mb-ram.2459/)
+* [DCEmulation](https://dcemulation.org/phpBB/viewtopic.php?t=105541)
