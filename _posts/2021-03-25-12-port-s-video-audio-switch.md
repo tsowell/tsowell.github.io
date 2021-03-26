@@ -23,9 +23,8 @@ finish and introduced me to several new disciplines along the way.
 All of the design files and code are in [the Github
 repository](https://www.github.com/tsowell/12-port-s-video-audio-switch).
 
-There's a video demo of the completed device in the [conclusion](#results),
-but [here's a link](https://www.youtube.com/watch?v=lbP0ReIGSx0) if you want to
-skip straight to it.
+There are photos and a video demo of the completed device in the
+[conclusion](#results), if you want to skip straight to it.
 
 ## Planning
 
