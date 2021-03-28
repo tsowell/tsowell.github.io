@@ -359,7 +359,7 @@ different animation and spacing styles that looked fine with logos that had a
 roughly 1:1 aspect ratio but looked strange when they had to include
 unusually-wide or -tall logos.
 
-I was able to address those by making the interface is a looping horizontal
+In response to those I designed an interface consisting of a looping horizontal
 ribbon of variable-width logos.  The knob doesn't change which input is
 selected - it just moves the position of the sliding window that is the visible
 portion of the ribbon.  Whatever input is nearest the center of the display is
