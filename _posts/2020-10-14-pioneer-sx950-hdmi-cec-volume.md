@@ -181,6 +181,9 @@ protocol timing is sensitive enough that it could be affected by the variance
 of the AVR's internal clock.
 
 ![The schematic](/assets/posts/pioneer-sx950-hdmi-cec-volume/schematic.svg){:width="100%" height="100%"}
+_EDIT: The MISO and SCK pins were [swapped in the original
+schematic](https://github.com/tsowell/avr-hdmi-cec-volume/issues/1) but are
+fixed now._
 
 This was a simple enough design that I was able to throw it all together on a
 prototype board.  About half of the wiring here is for the in-system
