@@ -47,7 +47,8 @@ Din ferecire pentru mine, există o resursă fantastică despre Cobra:
 Are istorie, manualele originale, scheme, software, și documentație de
 construirea autorului unor Cobra-uri în anii '90 precum și 2016.  Eforturi de
 conservare așa sunt atât de important, și vă încurajez să te uiți la site-ul.
-De fapt, e mult mai interesant decât acest articol de blog.
+De fapt, e mult mai interesant decât acest articol de blog.  (Nu sunt afiliat
+cu cobrasov.com)
 
 Site-ul e internaționalizată în limbile engleză și română, și de aceea
 documentez construirea mea în ambele limbile de asemenea.  În plus, dacă citiți
